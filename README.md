@@ -155,7 +155,7 @@ p finish - start
 
 ```
 
-###Using threads
+### Using threads
 
 ```ruby
 require 'awaiter'
