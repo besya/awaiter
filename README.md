@@ -205,6 +205,60 @@ You can use ```result1, result2 = wait method1, method2``` for getting results f
 The ```wait f1, f2, f3``` it's just equivalent of ```[f1.join.value, f2.join.value, f3.join.value]```
 
 
+### With Awaiter
+```ruby
+require 'awaiter'
+
+class MyClass
+  include Awaiter
+  async :first, :second
+
+  def first
+    'first result'
+  end
+
+  def second
+    first_result = await first
+    'second result with ' + first_result
+  end
+end
+
+my = MyClass.new
+
+p await my.first
+# "first result"
+
+p wait my.first, my.second
+# ["first result", "second result with first result"]
+```
+
+### Equivalent without using Awaiter
+```ruby
+class MyClass
+  def first
+    Thread.new do
+      'first result'
+    end
+  end
+
+  def second
+    Thread.new do
+      first_result = first.join.value
+      'second result with ' + first_result
+    end
+  end
+end
+
+my = MyClass.new
+
+p my.first.join.value
+# "first result"
+
+p [my.first.join.value, my.second.join.value]
+# ["first result", "second result with first result"]
+```
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
