@@ -202,6 +202,8 @@ Usage of ```await method``` is waiting for the thread was done and returns the r
 The ```await method``` is just equivalent of ```method.join.value```. 
 Usage of ```wait method1, method2``` will wait when both methods were finished and will return array of results. 
 You can use ```result1, result2 = wait method1, method2``` for getting results from async methods. 
+The ```wait f1, f2, f3``` it's just equivalent of ```[f1.join.value, f2.join.value, f3.join.value]```
+
 
 ## Development
 
