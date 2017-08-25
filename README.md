@@ -119,6 +119,77 @@ p r2
 # "first result"
 # "second result"
 
+```
+
+## Example
+
+### Without threads
+
+```ruby
+require 'open-uri'
+
+class Downloader
+  def download(name, url)
+    open('./files/' + name, 'wb') do |file|
+      file << open(url).read
+    end
+  end
+end
+
+file_url = 'http://www.sample-videos.com/audio/mp3/crowd-cheering.mp3'
+
+downloader = Downloader.new
+
+start = Time.now
+
+f1 = downloader.download('1.mp3', file_url)
+f2 = downloader.download('2.mp3', file_url)
+f3 = downloader.download('3.mp3', file_url)
+f4 = downloader.download('4.mp3', file_url)
+f5 = downloader.download('5.mp3', file_url)
+
+finish = Time.now
+
+p finish - start
+# 17.071239374
+
+```
+
+###Using threads
+
+```ruby
+require 'awaiter'
+require 'open-uri'
+
+class Downloader
+  include Awaiter
+  async :download
+
+  def download(name, url)
+    open('./files/' + name, 'wb') do |file|
+      file << open(url).read
+    end
+  end
+end
+
+file_url = 'http://www.sample-videos.com/audio/mp3/crowd-cheering.mp3'
+
+downloader = Downloader.new
+
+start = Time.now
+
+f1 = downloader.download('1.mp3', file_url)
+f2 = downloader.download('2.mp3', file_url)
+f3 = downloader.download('3.mp3', file_url)
+f4 = downloader.download('4.mp3', file_url)
+f5 = downloader.download('5.mp3', file_url)
+
+wait f1, f2, f3, f4, f5
+
+finish = Time.now
+
+p finish - start
+# 3.379413503
 
 ```
 
