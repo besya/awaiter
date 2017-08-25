@@ -1,4 +1,5 @@
 # Awaiter
+[![Gem Version](https://badge.fury.io/rb/awaiter.svg)](https://badge.fury.io/rb/awaiter)
 
 Using ruby Threads as async/await
 
